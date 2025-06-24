@@ -10,6 +10,9 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        back: "url('/public/back-gradient.png') url('/public/back-l.png') url('/public/back-r.png')"
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -51,6 +54,12 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        brand: {
+          background: "#111928",
+          foreground: "#1D364D",
+          primary: "#008980",
+          gray: "#BDBEC0",
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
