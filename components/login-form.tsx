@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import ZionLogo from "./zion-logo";
+import { HeaderZion } from "./header-zion";
 
 export function LoginForm({
   className,
@@ -40,7 +40,7 @@ export function LoginForm({
       });
       if (error) throw error;
       // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      router.push("/feed");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -49,62 +49,78 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6 p-['82px'] rounded-['53px'] bg-brand-background color-white" , className)} {...props}>
-      <Card className="bg-brand-foreground">
-        <CardHeader>
-          <CardTitle className="text-2xl flex items-center space-between gap-2 w-full">
-            <ZionLogo />
-            <div className="flex flex-col">
-              <p className="">Comunidade</p>
-              <p className="text-[32px] bg-clip-text bg-gradient-to-r from-[#A0E0DE] to-[#DAFDB8]">Zion Global</p>
-            </div>
+    <div
+      className={cn(
+        "flex flex-col gap-6 rounded-[53px] color-white max-w-[564px] md:w-3/5",
+        className
+      )}
+      {...props}
+    >
+      <Card className="bg-brand-foreground w-full md:p-[40px]">
+        <CardHeader className="max-w-[400px] m-auto">
+          <CardTitle>
+            <HeaderZion />
           </CardTitle>
-          <CardDescription>
-            <p className="text-white">Acesse sua conta</p>
-            <p className="text-brand-gray">Não tem acesso a plataforma? <Link href='/'>Clique aqui</Link></p>
-          </CardDescription>
         </CardHeader>
+        <CardDescription className="w-full text-center my-7 md:my-14">
+          <p className="text-white text-2xl md:text-4xl font-semibold">
+            Acesse sua conta
+          </p>
+          <p className="text-brand-gray text-xs md:text-sm text-center m-auto">
+            Não tem acesso a plataforma?
+            <Link
+              href="/auth/cadastro"
+              className="text-brand-primary font-bold underline decoration-1"
+            >
+              Clique aqui
+            </Link>
+          </p>
+        </CardDescription>
         <CardContent>
           <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2 relative">
-                 <Input
+                <Input
                   id="email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  maxLength={14}
-                  className=" bg-brand-foreground border-slate-600 text-white text-lg placeholder:text-slate-400 rounded-[8px] p-6"
+                  placeholder="Email"
                 />
                 <Label
-                  htmlFor="cpf"
-                  className={cn("absolute left-3 -top-2.5 bg-brand-foreground text-white text-xs font-medium px-2 py-1 rounded")}
+                  htmlFor="email"
+                  className={cn(
+                    "absolute left-3 -top-2.5 bg-brand-foreground text-white text-xs font-medium px-2 py-1 rounded"
+                  )}
                 >
-                  CPF
+                  Email
                 </Label>
-            
               </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
+              <div className="grid gap-2 relative">
                 <Input
                   id="password"
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Senha"
                 />
+                <Label
+                  htmlFor="password"
+                  className={cn(
+                    "absolute left-3 -top-2.5 bg-brand-foreground text-white text-xs font-medium px-2 py-1 rounded"
+                  )}
+                >
+                  Senha
+                </Label>
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full bg-brand-primary text-white rounded-full" disabled={isLoading}>
+              <Button
+                type="submit"
+                className="w-full bg-brand-primary text-white rounded-full hover:bg-brand-secondary"
+                disabled={isLoading}
+              >
                 {isLoading ? "Entrando..." : "Entrar"}
               </Button>
             </div>

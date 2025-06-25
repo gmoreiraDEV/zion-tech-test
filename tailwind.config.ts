@@ -11,7 +11,13 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        back: "url('/public/back-gradient.png') url('/public/back-l.png') url('/public/back-r.png')"
+        back: "url('/back-l.png'), url('/back-r.png'), url('/back-gradient.png')",
+      },
+      backgroundPosition: {
+        backPosition: "-10% 0px, 100% 0px, center top",
+      },
+      backgroundSize: {
+        backSize: "auto, auto, cover",
       },
       colors: {
         background: "hsl(var(--background))",
@@ -58,8 +64,10 @@ export default {
           background: "#111928",
           foreground: "#1D364D",
           primary: "#008980",
+          secondary: "#A0E0DE",
+          tertiary: "#DAFDB8",
           gray: "#BDBEC0",
-        }
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -68,5 +76,6 @@ export default {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
