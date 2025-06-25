@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { HeaderZion } from "./header-zion";
 
 export function SignUpForm({
   className,
@@ -44,7 +45,7 @@ export function SignUpForm({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
+          emailRedirectTo: `${window.location.origin}/feed`,
         },
       });
       if (error) throw error;
@@ -57,30 +58,55 @@ export function SignUpForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
+    <div
+      className={cn(
+        "flex flex-col gap-6 rounded-[53px] color-white max-w-[564px] md:w-3/5",
+        className
+      )}
+      {...props}
+    >
+      <Card className="bg-brand-foreground w-full md:p-[40px]">
+        <CardHeader className="max-w-[400px] m-auto">
+          <CardTitle>
+            <HeaderZion />
+          </CardTitle>
         </CardHeader>
+        <CardDescription className="w-full text-center my-7 md:my-14">
+          <p className="text-white text-2xl md:text-4xl font-semibold">
+            Cadastro
+          </p>
+          <p className="text-brand-gray text-xs md:text-sm text-center m-auto">
+            Já possui uma conta?{" "}
+            <Link
+              href="/"
+              className="text-brand-primary font-bold underline decoration-1"
+            >
+              Faça o login aqui
+            </Link>
+          </p>
+        </CardDescription>
         <CardContent>
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+              <div className="grid gap-2 relative">
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="seuEmail@email.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                <Label
+                  htmlFor="email"
+                  className={cn(
+                    "absolute left-3 -top-2.5 bg-brand-foreground text-white text-xs font-medium px-2 py-1 rounded"
+                  )}
+                >
+                  Email
+                </Label>
               </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
+              <div className="grid gap-2 relative">
                 <Input
                   id="password"
                   type="password"
@@ -88,11 +114,16 @@ export function SignUpForm({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <Label
+                  className={cn(
+                    "absolute left-3 -top-2.5 bg-brand-foreground text-white text-xs font-medium px-2 py-1 rounded"
+                  )}
+                  htmlFor="password"
+                >
+                  Password
+                </Label>
               </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
-                </div>
+              <div className="grid gap-2 relative">
                 <Input
                   id="repeat-password"
                   type="password"
@@ -100,17 +131,23 @@ export function SignUpForm({
                   value={repeatPassword}
                   onChange={(e) => setRepeatPassword(e.target.value)}
                 />
+                <Label
+                  className={cn(
+                    "absolute left-3 -top-2.5 bg-brand-foreground text-white text-xs font-medium px-2 py-1 rounded"
+                  )}
+                  htmlFor="repeat-password"
+                >
+                  Repeat Password
+                </Label>
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating an account..." : "Sign up"}
+              <Button
+                type="submit"
+                className="w-full bg-brand-primary text-white rounded-full hover:bg-brand-secondary"
+                disabled={isLoading}
+              >
+                {isLoading ? "Criando sua conta..." : "Cadastrar"}
               </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
-                Login
-              </Link>
             </div>
           </form>
         </CardContent>

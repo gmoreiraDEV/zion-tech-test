@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -9,13 +9,11 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Comunidade ZION GLOBAL",
+  description: "Uma plataforma para interação onde os membros da comunidade possam criar e visualizar postagens, interagir com comentários e visualizar um feed de notícias em tempo real.",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  display: "swap",
+const fontSans = Montserrat({
   subsets: ["latin"],
 });
 
@@ -25,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+    <html lang="pt-br" suppressHydrationWarning>
+      <body className={`${fontSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
