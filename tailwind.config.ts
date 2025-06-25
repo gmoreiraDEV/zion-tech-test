@@ -61,12 +61,17 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
         brand: {
-          background: "#111928",
+          background: {
+            400: "#0E1D2A",
+            500: "#111928",
+          },
           foreground: "#1D364D",
           primary: "#008980",
           secondary: "#A0E0DE",
           tertiary: "#DAFDB8",
           gray: "#BDBEC0",
+          "green-muted": "#33495A",
+          text: "#ABCAD9",
         },
       },
       borderRadius: {
