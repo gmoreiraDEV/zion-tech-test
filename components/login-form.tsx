@@ -1,7 +1,9 @@
 "use client";
+import Link from "next/link";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/serverClient";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,41 +14,37 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { login } from "@/app/(auth)/actions";
+
 import { HeaderZion } from "./header-zion";
+
+interface ILogin {
+  email: string,
+  password: string
+}
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const supabase = createClient();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILogin>()
+
+  const onSubmit: SubmitHandler<ILogin> = async(data: {email:string, password: string}) => {
+    const formData = new FormData()
+    formData.append('name', data.email)
+    formData.append('email', data.password)
+
+    await login(formData);
     setIsLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/feed");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    if (errors) console.log('error', errors.root)
+    setIsLoading(false);
+  }
 
   return (
     <div
@@ -77,15 +75,13 @@ export function LoginForm({
           </p>
         </CardDescription>
         <CardContent>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2 relative">
                 <Input
                   id="email"
                   type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                   {...register("email", { required: true })}
                   placeholder="Email"
                 />
                 <Label
@@ -97,13 +93,12 @@ export function LoginForm({
                   Email
                 </Label>
               </div>
+                {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
               <div className="grid gap-2 relative">
                 <Input
                   id="password"
                   type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  {...register("password", { required: true })}
                   placeholder="Senha"
                 />
                 <Label
@@ -115,7 +110,9 @@ export function LoginForm({
                   Senha
                 </Label>
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
+                 {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+                 {errors.root && <p className="text-sm text-red-500">{errors.root.message}</p>}
+             
               <Button
                 type="submit"
                 className="w-full bg-brand-primary text-white rounded-full hover:bg-brand-secondary"

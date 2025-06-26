@@ -3,7 +3,7 @@ import { Card, CardDescription } from "./ui/card";
 import { HeartIcon } from "./heart-icon";
 import { CommentIcon } from "./comment-icon";
 import CommentInput from "./comment-input";
-import { IFeedCard } from "@/utils/types";
+import { IFeedCard } from "@/types";
 import moment from "moment";
 
 export default function FeedCard(data: IFeedCard) {
