@@ -1,7 +1,4 @@
-// data-access/userDAL.ts
-import { PrismaClient } from "@/lib/generated/prisma";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/utils";
 
 export const getAllPosts = async () => {
   return prisma.post.findMany({
