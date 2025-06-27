@@ -1,11 +1,14 @@
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
-import { InfoIcon } from "lucide-react";
-import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
+import { Button } from "@/components/ui/button";
+import { CreatePostForm } from "@/components/create-post-form";
+import { FeedCard } from "@/components/feed-card";
 
 export default async function Feed() {
   const supabase = await createClient();
+
+  const posts:any[] = [];
 
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
@@ -14,23 +17,19 @@ export default async function Feed() {
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
+      <div className="bg-brand-foreground w-full p-6 flex flex-col rounded-lg">
+        <CreatePostForm userId={data.user.id} />
+      </div>
+      {posts && posts.length > 0 && (
+        <div className="bg-brand-foreground w-full flex flex-col rounded-lg">
+          {posts.map((post) => {
+            return <FeedCard key={post.id} post={post} user={data.user} />;
+          })}
         </div>
-      </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(data.user, null, 2)}
-        </pre>
-      </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
-      </div>
+      )}]
+      <Button className="bg-transparent border-2 border-brand-primary text-brand-text rounded-full w-auto max-w-[213px] m-auto mb-5">
+        Ver mais postagens
+      </Button>
     </div>
   );
 }
