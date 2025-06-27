@@ -41,15 +41,24 @@ export function SignUpForm({
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data: dataSignUp, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/feed`,
         },
       });
-      if (error) throw error;
-      router.push("/auth/sign-up-success");
+      let errorUser;
+      if (dataSignUp) {
+        const { error } = await supabase
+          .from("User")
+          .insert({ email, authUserId: dataSignUp?.user?.id });
+        errorUser = error;
+      }
+
+      if (error || errorUser) throw error;
+
+      router.push("/auth/cadastro-sucesso");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

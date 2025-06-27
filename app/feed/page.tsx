@@ -4,11 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { CreatePostForm } from "@/components/create-post-form";
 import { FeedCard } from "@/components/feed-card";
+import { IPost } from "@/lib/types";
 
 export default async function Feed() {
   const supabase = await createClient();
 
-  const posts:any[] = [];
+  const posts: IPost[] = [];
 
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
@@ -26,7 +27,7 @@ export default async function Feed() {
             return <FeedCard key={post.id} post={post} user={data.user} />;
           })}
         </div>
-      )}]
+      )}
       <Button className="bg-transparent border-2 border-brand-primary text-brand-text rounded-full w-auto max-w-[213px] m-auto mb-5">
         Ver mais postagens
       </Button>
