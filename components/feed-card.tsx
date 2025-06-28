@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import moment from "moment";
@@ -7,9 +9,29 @@ import { Card, CardDescription } from "@/components/ui/card";
 import { HeartIcon } from "@/components/heart-icon";
 import { CommentIcon } from "@/components/comment-icon";
 import CommentInput from "@/components/comment-input";
+import { getUserId } from "@/data-access-layer/users.dal";
+import { createClient } from "@/lib/supabase/client";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function FeedCard({ post, user }: { post: IPost; user: any }) {
+export function FeedCard({ post }: { post: IPost }) {
+  const [user, setUser] = useState<any>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data?.user) {
+        console.error("Erro ao obter usuário:", error);
+        return;
+      }
+
+      const userId = data.user.id;
+      const result = await getUserId(userId);
+      setUser(result);
+    }
+
+    fetchUser();
+  }, []);
+
   return (
     <Card className="gap-2">
       <div className="flex justify-start items-center gap-4 p-6">

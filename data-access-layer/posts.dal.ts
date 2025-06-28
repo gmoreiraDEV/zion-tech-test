@@ -6,7 +6,7 @@ const supabase = createClient();
 export const getAllPosts = async () => {
   const { data, error } = await supabase.from("Post").select();
 
-  if (error) return error;
+  if (error) throw new Error(error.message);
   return data;
 };
 
