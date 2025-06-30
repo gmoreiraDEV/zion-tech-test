@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
-import { CreatePostForm } from "@/components/create-post-form";
-import PostsFeed from "@/components/posts-feed";
+import { getIsProfileCompleted } from "@/data-access-layer/profile.dal";
+import { FeedWrapper } from "@/components/feed-wrapper";
 
 export default async function Feed() {
   const supabase = await createClient();
@@ -13,15 +12,7 @@ export default async function Feed() {
     redirect("/");
   }
 
-  return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="bg-brand-foreground w-full p-6 flex flex-col rounded-lg">
-        <CreatePostForm userId={data.user.id} />
-      </div>
-      <PostsFeed />
-      <Button className="bg-transparent border-2 border-brand-primary text-brand-text rounded-full w-auto max-w-[213px] m-auto mb-5">
-        Ver mais postagens
-      </Button>
-    </div>
-  );
+  const profile = await getIsProfileCompleted(data.user.id);
+
+  return <FeedWrapper userId={data.user.id} showProfileModal={!profile} />;
 }

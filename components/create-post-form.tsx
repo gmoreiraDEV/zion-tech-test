@@ -9,6 +9,7 @@ import { getUserId } from "@/data-access-layer/users.dal";
 import { PictureIcon } from "@/components/picture-icon";
 import { Button } from "@/components/ui/button";
 import { UploadArea } from "./file-drop-zone";
+import { Textarea } from "./ui/textarea";
 
 type CreatePostInput = {
   description: string;
@@ -47,7 +48,7 @@ export function CreatePostForm({ userId }: { userId: string }) {
       className="w-full flex flex-col gap-6"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <textarea
+      <Textarea
         id="postText"
         {...register("description", { required: true })}
         placeholder="Compartilhe o que está pensando..."

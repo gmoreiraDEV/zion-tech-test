@@ -4,7 +4,10 @@ import { IPost } from "@/lib/types";
 const supabase = createClient();
 
 export const getAllPosts = async () => {
-  const { data, error } = await supabase.from("Post").select();
+  const { data, error } = await supabase
+    .from("Post")
+    .select("*, comment_postId_fkey(count)")
+    .order("createdAt", { ascending: false });
 
   if (error) throw new Error(error.message);
   return data;
@@ -29,3 +32,12 @@ export const deletePost = async (id: string) => {
   if (error) return error;
   return data;
 };
+
+export async function incrementLikes(postId: string) {
+  const { error } = await supabase.rpc("increment_post_likes", {
+    post_id: postId,
+  });
+
+  if (error) throw new Error(error.message);
+  return true;
+}
