@@ -67,6 +67,7 @@ export default {
           secondary: "#A0E0DE",
           tertiary: "#DAFDB8",
           gray: "#BDBEC0",
+          "green-muted": "#33495A",
         },
       },
       borderRadius: {
