@@ -6,8 +6,8 @@ export async function getIsProfileCompleted(userId: string) {
     .from("User")
     .select("*")
     .eq("authUserId", userId)
-    .single();
+    .limit(1)
 
   if (error) throw new Error(error.message);
-  return data?.profileCompleted;
+  return data[0]?.profileCompleted;
 }
