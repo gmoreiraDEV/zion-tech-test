@@ -31,7 +31,9 @@ export function CreatePostForm({ userId }: { userId: string }) {
 
     await createPost({
       ...data,
-      createdAt: new Date(),
+      createdAt: `${new Date().toISOString}`,
+      updatedAt: `${new Date().toISOString}`,
+      likes: 0,
       ownerId: dataUserId.id,
       images: uploadedImages,
     });

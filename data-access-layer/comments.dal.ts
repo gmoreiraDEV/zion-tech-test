@@ -26,3 +26,16 @@ export async function createComment({
   if (error) throw new Error(error.message);
   return data!;
 }
+
+export async function getCommentsByPostId(postId: string) {
+  const { data, error } = await supabase
+    .from("Comment")
+    .select(
+      "id, description, createdAt, userId, Profile(userId, picture, User(name))"
+    )
+    .eq("postId", postId)
+    .order("createdAt", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return data;
+}

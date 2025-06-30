@@ -15,6 +15,7 @@ import { getUserId } from "@/data-access-layer/users.dal";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useLikePost } from "@/hooks/useLikes";
+import { CommentsList } from "./comment-list";
 
 export function FeedCard({ post }: { post: IPost }) {
   const [user, setUser] = useState<any>(null);
@@ -35,7 +36,11 @@ export function FeedCard({ post }: { post: IPost }) {
     }
 
     fetchUser();
-  }, []);
+  }, [supabase.auth]);
+
+  if (!user) {
+    return <Card className="p-6 text-sm text-white/60">Carregando...</Card>;
+  }
 
   return (
     <Card className="gap-2">
@@ -110,6 +115,7 @@ export function FeedCard({ post }: { post: IPost }) {
           <CommentInput postId={post.id} userId={user.id} />
         </div>
       </div>
+      <CommentsList postId={post.id} />
     </Card>
   );
 }

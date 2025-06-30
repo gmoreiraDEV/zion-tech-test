@@ -6,8 +6,7 @@ const supabase = createClient();
 export async function getAllPosts(): Promise<IPost[]> {
   const { data, error } = await supabase
     .from("post_with_comments_count")
-    .select("*")
-    .order("createdAt", { ascending: false });
+    .select("*");
 
   if (error) throw new Error(error.message);
   return data!;
