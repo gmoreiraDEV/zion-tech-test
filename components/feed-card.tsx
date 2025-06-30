@@ -77,7 +77,7 @@ export function FeedCard({ post }: { post: IPost }) {
           ))}
         <div className="flex justify-start items-center w-full p-6 gap-8">
           <Button
-            onClick={() => likePost({ postId: post.id })}
+            onClick={() => likePost(post.id)}
             disabled={liking}
             className="inline-flex gap-2 justify-center bg-transparent items-center group hover:bg-transparent shadow-none"
           >
@@ -107,7 +107,7 @@ export function FeedCard({ post }: { post: IPost }) {
                   )}&size=250`
             }
           />
-          <CommentInput postId={post.id} />
+          <CommentInput postId={post.id} userId={user.id} />
         </div>
       </div>
     </Card>

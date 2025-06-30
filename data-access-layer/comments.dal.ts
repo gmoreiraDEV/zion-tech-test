@@ -1,23 +1,28 @@
 import { createClient } from "@/lib/supabase/client";
+import { IComment } from "@/lib/types";
+
+const supabase = createClient();
 
 export async function createComment({
   postId,
+  userId,
   description,
 }: {
   postId: string;
+  userId: string;
   description: string;
-}) {
-  const supabase = createClient();
-
-  const { data: userData } = await supabase.auth.getUser();
-  if (!userData?.user) throw new Error("Usuário não autenticado");
-
-  const { data, error } = await supabase.from("Comment").insert({
-    description,
-    postId,
-  });
+}): Promise<IComment[]> {
+  const { data, error } = await supabase
+    .from("Comment")
+    .insert([
+      {
+        postId,
+        userId,
+        description,
+      },
+    ])
+    .select();
 
   if (error) throw new Error(error.message);
-
-  return data;
+  return data!;
 }

@@ -1,9 +1,19 @@
 export interface IPost {
   id: string;
-  description?: string;
-  createdAt: Date;
-  images?: string[];
   ownerId: string;
-  likes?: string;
-  comments?: string[];
+  description: string;
+  likes: number;
+  createdAt: string;
+  updatedAt: string;
+  images?: string[];
+  comments_count?: number;
+}
+
+export interface IComment {
+  id: string;
+  postId: string;
+  userId: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
 }

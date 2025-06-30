@@ -8,7 +8,13 @@ import { AddPhotoIcon } from "@/components/add-photo-icon";
 import { SendIcon } from "@/components/send-icon";
 import { useAddComment } from "@/hooks/useComment";
 
-export default function CommentInput({ postId }: { postId: string }) {
+export default function CommentInput({
+  postId,
+  userId,
+}: {
+  postId: string;
+  userId: string;
+}) {
   const { register, handleSubmit, reset, watch } = useForm<{
     description: string;
   }>();
@@ -18,7 +24,7 @@ export default function CommentInput({ postId }: { postId: string }) {
   const { mutate, isPending } = useAddComment(postId);
 
   async function onSubmit(data: { description: string }) {
-    mutate({ description: data.description });
+    mutate({ userId, description: data.description });
     reset();
   }
   return (

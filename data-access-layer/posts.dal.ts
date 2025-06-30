@@ -3,15 +3,15 @@ import { IPost } from "@/lib/types";
 
 const supabase = createClient();
 
-export const getAllPosts = async () => {
+export async function getAllPosts(): Promise<IPost[]> {
   const { data, error } = await supabase
-    .from("Post")
-    .select("*, comment_postId_fkey(count)")
+    .from("post_with_comments_count")
+    .select("*")
     .order("createdAt", { ascending: false });
 
   if (error) throw new Error(error.message);
-  return data;
-};
+  return data!;
+}
 
 export const getPostById = async (id: string) => {
   const { data, error } = await supabase.from("Post").select().eq("id", id);
