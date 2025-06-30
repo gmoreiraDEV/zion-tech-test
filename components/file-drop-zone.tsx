@@ -2,11 +2,9 @@
 import { useCallback, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { uploadFile } from "@/data-access-layer/upload.dal";
-import { createClient } from "@/lib/supabase/client";
 import { getUserProfile } from "@/data-access-layer/users.dal";
 import Image from "next/image";
 import { UploadIcon } from "./upload-icon";
-const supabase = createClient();
 
 export function UploadArea({
   onUploadComplete,

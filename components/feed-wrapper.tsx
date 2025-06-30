@@ -6,7 +6,6 @@ import PostsFeed from "@/components/posts-feed";
 import { Button } from "@/components/ui/button";
 
 export function FeedWrapper({
-  userId,
   showProfileModal,
 }: {
   userId: string;
@@ -19,7 +18,7 @@ export function FeedWrapper({
       )}
       <div className="flex-1 w-full flex flex-col gap-12">
         <div className="bg-brand-foreground w-full p-6 flex flex-col rounded-lg">
-          <CreatePostForm userId={userId} />
+          <CreatePostForm />
         </div>
         <PostsFeed />
         <Button className="bg-transparent border-2 border-brand-primary text-brand-text rounded-full w-auto max-w-[213px] m-auto mb-5">

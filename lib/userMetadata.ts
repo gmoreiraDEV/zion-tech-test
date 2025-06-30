@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function getUserMetadata(user: any) {
   const metadata = user?.user_metadata ?? {};
 
