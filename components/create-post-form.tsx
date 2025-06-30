@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { createPost } from "@/data-access-layer/posts.dal";
-import { getUserId } from "@/data-access-layer/users.dal";
+import { getUserProfile } from "@/data-access-layer/users.dal";
 import { PictureIcon } from "@/components/picture-icon";
 import { Button } from "@/components/ui/button";
 import { UploadArea } from "./file-drop-zone";
@@ -15,7 +15,7 @@ type CreatePostInput = {
   description: string;
 };
 
-export function CreatePostForm({ userId }: { userId: string }) {
+export function CreatePostForm() {
   const [isDownload, setIsDownload] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const {
@@ -27,14 +27,11 @@ export function CreatePostForm({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
 
   const onSubmit: SubmitHandler<CreatePostInput> = async (data) => {
-    const dataUserId = await getUserId(userId);
+    const dataUser = await getUserProfile();
 
     await createPost({
       ...data,
-      createdAt: `${new Date().toISOString}`,
-      updatedAt: `${new Date().toISOString}`,
-      likes: 0,
-      ownerId: dataUserId.id,
+      ownerId: dataUser.id,
       images: uploadedImages,
     });
 

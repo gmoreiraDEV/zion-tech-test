@@ -15,7 +15,7 @@ export function FeedWrapper({
   return (
     <>
       {showProfileModal && (
-        <ProfileModal userId={userId} closeModal={showProfileModal} />
+        <ProfileModal closeModal={showProfileModal} />
       )}
       <div className="flex-1 w-full flex flex-col gap-12">
         <div className="bg-brand-foreground w-full p-6 flex flex-col rounded-lg">

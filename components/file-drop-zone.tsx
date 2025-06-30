@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { uploadFile } from "@/data-access-layer/upload.dal";
 import { createClient } from "@/lib/supabase/client";
-import { getUserId } from "@/data-access-layer/users.dal";
+import { getUserProfile } from "@/data-access-layer/users.dal";
 import Image from "next/image";
 import { UploadIcon } from "./upload-icon";
 const supabase = createClient();
@@ -31,15 +31,7 @@ export function UploadArea({
       const previews = files.map((file) => URL.createObjectURL(file));
       setPreviewFiles((prev) => [...prev, ...previews]);
 
-      const { data: dataUser } = await supabase.auth.getUser();
-      const userId = dataUser?.user?.id;
-
-      if (!userId) {
-        console.error("Usuário não autenticado");
-        return;
-      }
-
-      const dataUserId = await getUserId(userId);
+      const dataUserId = await getUserProfile();
 
       try {
         const urls = await Promise.all(

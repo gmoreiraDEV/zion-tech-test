@@ -1,11 +1,12 @@
 "use client";
 import { usePosts } from "@/hooks/usePosts";
 import { FeedCard } from "@/components/feed-card";
+import { FeedCardSkeleton } from "@/components/feed-card-skeleton";
 
 export default function PostsFeed() {
   const { data: posts, isLoading, error } = usePosts();
 
-  if (isLoading) return <p>Carregando posts...</p>;
+  if (isLoading) return <FeedCardSkeleton />
   if (error) return <p>Erro ao carregar: {error.message}</p>;
   return (
     <>

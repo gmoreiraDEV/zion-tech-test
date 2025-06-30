@@ -11,11 +11,12 @@ import { Card, CardDescription } from "@/components/ui/card";
 import { HeartIcon } from "@/components/heart-icon";
 import { CommentIcon } from "@/components/comment-icon";
 import CommentInput from "@/components/comment-input";
-import { getUserId } from "@/data-access-layer/users.dal";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useLikePost } from "@/hooks/useLikes";
 import { CommentsList } from "./comment-list";
+import { getUserMetadata } from "@/lib/userMetadata";
+import { Skeleton } from "./ui/skeleton";
 
 export function FeedCard({ post }: { post: IPost }) {
   const [user, setUser] = useState<any>(null);
@@ -30,16 +31,14 @@ export function FeedCard({ post }: { post: IPost }) {
         return;
       }
 
-      const userId = data.user.id;
-      const result = await getUserId(userId);
-      setUser(result);
+      setUser(getUserMetadata(data.user));
     }
 
     fetchUser();
   }, [supabase.auth]);
 
   if (!user) {
-    return <Card className="p-6 text-sm text-white/60">Carregando...</Card>;
+    return <Skeleton className="p-6 text-sm text-white/60" />
   }
 
   return (

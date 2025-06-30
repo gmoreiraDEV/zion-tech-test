@@ -1,38 +1,32 @@
 import { CommentCard } from "@/components/comment-card";
 import { useComments } from "@/hooks/useComment";
+import { CommentsListSkeleton } from "@/components/comments-list-skeleton";
 
 export function CommentsList({ postId }: { postId: string }) {
   const { data: comments, isLoading, isError } = useComments(postId);
 
-  if (isLoading)
-    return (
-      <p className="text-sm text-muted-foreground">Carregando comentários...</p>
-    );
+  if (isLoading) return <CommentsListSkeleton />
+  
   if (isError)
     return (
-      <p className="text-sm text-red-500">Erro ao carregar comentários.</p>
+      <p className="text-sm text-red-500 p-4">Erro ao carregar comentários.</p>
     );
   if (!comments || comments.length === 0)
     return (
-      <p className="text-sm text-muted-foreground">Nenhum comentário ainda.</p>
+      <p className="text-sm text-muted-foreground p-4">Nenhum comentário ainda.</p>
     );
 
   return (
-    <div className="flex flex-col space-y-4 mt-4">
+    <div className="flex flex-col space-y-4 mt-4 p-4">
       {comments.map((comment) => {
-        const userName = comment?.Profile[0]?.User[0].name || "Usuário";
-
-        const avatarUrl = comment?.Profile[0]?.picture
-          ? comment.Profile[0].picture
-          : `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(
-              userName
-            )}&size=250`;
-
         return (
           <CommentCard
             key={comment.id}
-            name={userName}
-            avatarUrl={avatarUrl}
+            name={comment.user?.raw_user_meta_data?.full_name || "Anônimo"}
+            avatarUrl={
+              comment.user?.raw_user_meta_data?.avatar_url ||
+              "https://ui-avatars.com/api/?name=Anônimo"
+            }
             comment={comment.description}
             date={comment.createdAt}
           />

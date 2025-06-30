@@ -19,7 +19,7 @@ export const getPostById = async (id: string) => {
   return data;
 };
 
-export const createPost = async (dataPost: Omit<IPost, "id">) => {
+export const createPost = async (dataPost: Partial<IPost>) => {
   const { data, error } = await supabase.from("Post").insert(dataPost);
   if (error) return error;
   return data;

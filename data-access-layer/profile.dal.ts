@@ -1,13 +1,17 @@
-import { createClient } from "@/lib/supabase/client";
-const supabase = createClient();
+export async function getIsProfileCompleted({data, error}: {data: any, error: any}) {
+  
 
-export async function getIsProfileCompleted(userId: string) {
-  const { data, error } = await supabase
-    .from("User")
-    .select("*")
-    .eq("authUserId", userId)
-    .limit(1)
+  if (error) {
+    console.error("Erro ao buscar usuário:", error.message);
+    return false;
+  }
 
-  if (error) throw new Error(error.message);
-  return data[0]?.profileCompleted;
+  const user = data?.user;
+  if (!user) {
+    console.warn("Usuário não encontrado:", data.user.id);
+    return false;
+  }
+
+  const profileCompleted = user.user_metadata?.profile_completed;
+  return !!profileCompleted;
 }
