@@ -14,9 +14,7 @@ export async function uploadFile(file: File, userId: string) {
       upsert: false,
     });
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw new Error(error.message);
 
   const { data: signedUrl } = supabase.storage
     .from(bucketName)

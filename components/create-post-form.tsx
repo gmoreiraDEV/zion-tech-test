@@ -23,7 +23,10 @@ export function CreatePostForm() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreatePostInput>();
+  } = useForm<CreatePostInput>({
+    mode: "onSubmit",
+    shouldUnregister: false,
+  });
   const queryClient = useQueryClient();
 
   const onSubmit: SubmitHandler<CreatePostInput> = async (data) => {
@@ -56,8 +59,12 @@ export function CreatePostForm() {
       {isDownload && <UploadArea onUploadComplete={setUploadedImages} />}
       <div className="w-full flex items-center justify-between">
         <Button
+          type="button"
           className="bg-brand-green-muted rounded-full text-white text-sm font-bold flex justify-center items-center gap-2 h-10 hover:bg-brand-background"
-          onClick={() => setIsDownload((oldState) => !oldState)}
+          onClick={(e) => {
+            e.preventDefault();
+            setIsDownload((oldState) => !oldState);
+          }}
         >
           <PictureIcon />
           <p>Image/Video</p>
@@ -70,7 +77,9 @@ export function CreatePostForm() {
         </Button>
       </div>
       {errors.description && (
-        <span className="text-sm text-red-400">Ops, algo deu errado!</span>
+        <span className="text-sm text-red-400">
+          Ops, algo deu errado com a descrição. Por favor tente novamente!
+        </span>
       )}
     </form>
   );
