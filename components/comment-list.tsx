@@ -17,16 +17,13 @@ export function CommentsList({ postId }: { postId: string }) {
     );
 
   return (
-    <div className="flex flex-col space-y-4 mt-4 p-4">
+    <div className="flex flex-col space-y-4 mt-4 p-4 w-[90%] m-auto">
       {comments.map((comment) => {
         return (
           <CommentCard
             key={comment.id}
-            name={comment.user?.raw_user_meta_data?.full_name || "Anônimo"}
-            avatarUrl={
-              comment.user?.raw_user_meta_data?.avatar_url ||
-              "https://ui-avatars.com/api/?name=Anônimo"
-            }
+            name={comment.raw_user_meta_data?.full_name}
+            avatarUrl={comment.raw_user_meta_data?.avatar_url}
             comment={comment.description}
             date={comment.createdAt}
           />
