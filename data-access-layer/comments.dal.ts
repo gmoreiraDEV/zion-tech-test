@@ -29,7 +29,7 @@ export async function createComment({
 
 export async function getCommentsByPostId(postId: string): Promise<CommentWithUser[]> {
   const { data, error } = await supabase
-    .from('comment_with_user')
+    .from('Comment')
     .select('*')
     .eq("postId", postId)
     .order("createdAt", { ascending: false });
