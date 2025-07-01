@@ -28,9 +28,9 @@ export async function createComment({
 }
 
 export async function getCommentsByPostId(postId: string): Promise<CommentWithUser[]> {
-  const { data, error } = await supabase
-    .from('Comment')
-    .select('*')
+   const { data, error } = await supabase
+    .from("comment_with_user")
+    .select("*")
     .eq("postId", postId)
     .order("createdAt", { ascending: false });
 

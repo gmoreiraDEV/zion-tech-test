@@ -62,6 +62,7 @@ export default {
         },
         brand: {
           background: "#111928",
+         "background-opacity": "#919EAB1F",
           foreground: "#1D364D",
           primary: "#008980",
           secondary: "#A0E0DE",

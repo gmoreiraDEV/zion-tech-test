@@ -20,6 +20,7 @@ import { Skeleton } from "./ui/skeleton";
 
 export function FeedCard({ post }: { post: IPost }) {
   const [user, setUser] = useState<any>(null);
+  const [showComments, setShowComments] = useState(false);
   const supabase = createClient();
   const { mutate: likePost, isPending: liking } = useLikePost();
 
@@ -88,10 +89,12 @@ export function FeedCard({ post }: { post: IPost }) {
             <HeartIcon className="!w-6 !h-6" />
             <p className="text-sm text-[#94AEBA]">{post.likes && post.likes}</p>
           </Button>
-          <p className="inline-flex gap-2 items-center">
-            <CommentIcon />
-            {post.comments_count}
-          </p>
+          <Button 
+          onClick={() => setShowComments(old => !old)}
+          className="inline-flex gap-2 justify-center bg-transparent items-center group hover:bg-transparent shadow-none">
+            <CommentIcon className="!w-6 !h-6" />
+             <p className="text-sm text-[#94AEBA]">{post.comments_count && post.comments_count}</p>
+          </Button>
         </div>
 
         <p className="text-brand-text p-6 pt-0">{post.description}</p>
@@ -114,7 +117,7 @@ export function FeedCard({ post }: { post: IPost }) {
           <CommentInput postId={post.id} userId={user.id} />
         </div>
       </div>
-      <CommentsList postId={post.id} />
+      {showComments && <CommentsList postId={post.id} /> }
     </Card>
   );
 }
