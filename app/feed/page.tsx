@@ -12,9 +12,7 @@ export default async function Feed() {
     redirect("/");
   }
 
-  console.log(data.user.id)
-
-  const profile = await getIsProfileCompleted({data, error});
+  const profile = await getIsProfileCompleted({ data, error });
 
   return <FeedWrapper userId={data.user.id} showProfileModal={!profile} />;
 }

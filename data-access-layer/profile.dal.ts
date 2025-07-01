@@ -1,6 +1,11 @@
-export async function getIsProfileCompleted({data, error}: {data: any, error: any}) {
-  
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export async function getIsProfileCompleted({
+  data,
+  error,
+}: {
+  data: any;
+  error: any;
+}) {
   if (error) {
     console.error("Erro ao buscar usuário:", error.message);
     return false;
