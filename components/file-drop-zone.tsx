@@ -16,6 +16,7 @@ export function UploadArea({
   const [previewFiles, setPreviewFiles] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = useCallback(
     async (e: React.DragEvent<HTMLDivElement>) => {
@@ -23,8 +24,19 @@ export function UploadArea({
       setIsOver(false);
       setIsUploading(true);
 
-      const files = Array.from(e.dataTransfer.files);
-      if (!files.length) return;
+      const allFiles = Array.from(e.dataTransfer.files);
+      if (!allFiles.length) return;
+
+      const acceptedTypes = ["image/jpeg", "image/png", "image/gif"];
+      const files = allFiles.filter((file) =>
+        acceptedTypes.includes(file.type)
+      );
+
+      if (files.length === 0) {
+        alert("Somente arquivos JPG, PNG ou GIF são permitidos.");
+        setIsUploading(false);
+        return;
+      }
 
       const previews = files.map((file) => URL.createObjectURL(file));
       setPreviewFiles((prev) => [...prev, ...previews]);
@@ -45,6 +57,35 @@ export function UploadArea({
     [onUploadComplete]
   );
 
+  const handleFileSelect = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+
+      setIsUploading(true);
+
+      const previews = files.map((file) => URL.createObjectURL(file));
+      setPreviewFiles((prev) => [...prev, ...previews]);
+
+      const dataUserId = await getUserProfile();
+
+      try {
+        const urls = await Promise.all(
+          files.map((file) => uploadFile(file, dataUserId.id))
+        );
+        onUploadComplete((prev) => [...prev, ...urls]);
+      } catch (err) {
+        console.error("Erro ao fazer upload:", err);
+      } finally {
+        setIsUploading(false);
+        if (inputRef.current) {
+          inputRef.current.value = "";
+        }
+      }
+    },
+    [onUploadComplete]
+  );
+
   const scrollToIndex = (index: number) => {
     const container = containerRef.current;
     if (!container) return;
@@ -59,7 +100,7 @@ export function UploadArea({
   };
 
   return (
-    <div className="flex items-center justify-start w-full gap-4">
+    <div className="flex flex-col md:flex-row items-center justify-start w-full gap-4">
       {previewFiles && previewFiles.length > 0 && (
         <div className="flex flex-col justify-center items-center">
           <div
@@ -96,6 +137,7 @@ export function UploadArea({
       )}
 
       <div
+        onClick={() => inputRef.current?.click()}
         onDragEnter={() => setIsOver(true)}
         onDragOver={(e) => {
           e.preventDefault();
@@ -104,7 +146,7 @@ export function UploadArea({
         onDragLeave={() => setIsOver(false)}
         onDrop={handleDrop}
         className={cn(
-          "w-[148.5px] h-[144px] border border-dashed rounded-3xl flex items-center justify-center text-brand-text/20 text-center",
+          "cursor-pointer w-full md:w-[148.5px] h-[144px] border border-dashed rounded-3xl flex flex-col md:flex-row items-center justify-center text-brand-text/20 text-center",
           isOver ? "border-brand-primary" : "border-brand-gray/20"
         )}
       >
@@ -116,6 +158,14 @@ export function UploadArea({
             ? "Solte aqui!"
             : "Arraste arquivos para enviar"}
         </div>
+        <input
+          ref={inputRef}
+          type="file"
+          multiple
+          accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif"
+          onChange={handleFileSelect}
+          className="hidden"
+        />
       </div>
     </div>
   );
