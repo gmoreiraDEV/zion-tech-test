@@ -17,9 +17,11 @@ import { useLikePost } from "@/hooks/useLikes";
 import { CommentsList } from "./comment-list";
 import { getUserMetadata } from "@/lib/userMetadata";
 import { Skeleton } from "./ui/skeleton";
+import { getUserMetadataById } from "@/data-access-layer/users.dal";
 
 export function FeedCard({ post }: { post: IPost }) {
   const [user, setUser] = useState<any>(null);
+  const [author, setAuthor] = useState<any>(null);
   const [showComments, setShowComments] = useState(false);
   const supabase = createClient();
   const { mutate: likePost, isPending: liking } = useLikePost();
@@ -35,8 +37,20 @@ export function FeedCard({ post }: { post: IPost }) {
       setUser(getUserMetadata(data.user));
     }
 
+    async function fetchAuthor() {
+      try {
+        const data = await getUserMetadataById(post.ownerId);
+        setAuthor(data);
+      } catch (err) {
+        console.error("Erro ao buscar autor:", err);
+      }
+    }
+
     fetchUser();
-  }, [supabase.auth]);
+    fetchAuthor();
+  }, [supabase.auth, post.ownerId]);
+
+  const authorName = author?.full_name || "User";
 
   if (!user) {
     return <Skeleton className="p-6 text-sm text-white/60" />
@@ -51,15 +65,15 @@ export function FeedCard({ post }: { post: IPost }) {
           width={32}
           height={32}
           src={
-            user?.profile?.picture
-              ? user.profile.picture
+            author?.profile?.picture
+              ? author.profile.picture
               : `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(
-                  user?.name || "User"
+                  authorName
                 )}&size=250`
           }
         />
         <div className="flex flex-col justify-start items-start">
-          <p className="text-base font-bold">{user?.name || "Usuário"}</p>
+          <p className="text-base font-bold">{authorName}</p>
           <p className="text-xs">
             {moment(post.createdAt).startOf("day").fromNow()}
           </p>

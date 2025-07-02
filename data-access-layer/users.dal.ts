@@ -17,6 +17,18 @@ export async function getUserProfile() {
   };
 }
 
+export async function getUserMetadataById(userId: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .rpc("get_user_metadata", { user_id: userId })
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+
 export const updateUserProfile = async (payload: {
     full_name: string;
     avatar_url?: string;
