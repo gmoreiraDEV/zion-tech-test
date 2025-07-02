@@ -22,7 +22,7 @@ export default function ProtectedLayout({
             </div>
           </nav>
           <HeaderZion />
-          <div className="flex-1 flex flex-col gap-20 w-1/2 p-5">
+          <div className="flex-1 flex flex-col gap-20 md:w-1/2 p-5">
             {children}
           </div>
         </div>
